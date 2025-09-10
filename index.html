@@ -10,19 +10,58 @@
     h2 { background: #2174b8; color: #fff; padding: 10px; text-align: center; }
     #tabla { margin: 20px auto; max-width: 1200px; }
     .tabulator { background: #fff; }
+    .botonera { text-align: center; margin-bottom: 20px; }
+    button {
+      background: #2174b8;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      margin: 0 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover { background: #135085; }
+    .instrucciones {
+      background: #f8f8f8;
+      border: 1px solid #2174b8;
+      padding: 12px;
+      margin: 20px auto;
+      max-width: 900px;
+      font-size: 16px;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
   <h2>Departamento de Química -- FIUBA --</h2>
+
+  <div class="instrucciones">
+    <strong>Instrucciones:</strong><br>
+    - Haz doble clic en cualquier celda para editar.<br>
+    - Filtra los datos usando los campos sobre cada columna.<br>
+    - Puedes mover columnas arrastrando el encabezado.<br>
+    - Para <b>exportar</b> la tabla, usa los botones de abajo.<br>
+    - Para <b>guardar tus cambios</b> localmente, exporta como JSON.<br>
+    <em>* Los cambios hechos aquí no se guardan automáticamente en el servidor.</em>
+  </div>
+
+  <div class="botonera">
+    <button onclick="exportar('csv')">Exportar a CSV</button>
+    <button onclick="exportar('xlsx')">Exportar a Excel</button>
+    <button onclick="exportar('json')">Exportar a JSON</button>
+  </div>
+
   <div id="tabla"></div>
 
   <!-- Tabulator JS -->
   <script src="https://unpkg.com/tabulator-tables@5.5.0/dist/js/tabulator.min.js"></script>
   <script>
+    let tabla;
     fetch('config.json')
       .then(r => r.json())
       .then(data => {
-        const table = new Tabulator("#tabla", {
+        tabla = new Tabulator("#tabla", {
           data: data,
           layout: "fitColumns",
           columns: [
@@ -34,10 +73,19 @@
           ],
           movableColumns: true,
           resizableRows: true,
-          pagination: false,
-          editable: true,
         });
       });
+
+    function exportar(tipo) {
+      if(!tabla) return;
+      if(tipo === 'csv') {
+        tabla.download("csv", "materias-quimica.csv");
+      } else if(tipo === 'xlsx') {
+        tabla.download("xlsx", "materias-quimica.xlsx", {sheetName:"Materias"});
+      } else if(tipo === 'json') {
+        tabla.download("json", "materias-quimica.json");
+      }
+    }
   </script>
 </body>
 </html>
