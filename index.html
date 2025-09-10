@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Departamento de Química -- FIUBA --</title>
+  <!-- Tabulator CSS -->
+  <link href="https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator.min.css" rel="stylesheet">
+  <style>
+    body { background: #e0f0ff; font-family: Arial, sans-serif; }
+    h2 { background: #2174b8; color: #fff; padding: 10px; text-align: center; }
+    #tabla { margin: 20px auto; max-width: 1200px; }
+    .tabulator { background: #fff; }
+  </style>
+</head>
+<body>
+  <h2>Departamento de Química -- FIUBA --</h2>
+  <div id="tabla"></div>
+
+  <!-- Tabulator JS -->
+  <script src="https://unpkg.com/tabulator-tables@5.5.0/dist/js/tabulator.min.js"></script>
+  <script>
+    fetch('config.json')
+      .then(r => r.json())
+      .then(data => {
+        const table = new Tabulator("#tabla", {
+          data: data,
+          layout: "fitColumns",
+          columns: [
+            { title: "Código", field: "codigo", editor: "input", headerFilter: "input" },
+            { title: "Materia", field: "materia", editor: "input", headerFilter: "input" },
+            { title: "Día y Horario", field: "horario", editor: "input", headerFilter: "input" },
+            { title: "Aula", field: "aula", editor: "input", headerFilter: "input" },
+            { title: "Profesor/a(s)", field: "profesor", editor: "input", headerFilter: "input" }
+          ],
+          movableColumns: true,
+          resizableRows: true,
+          pagination: false,
+          editable: true,
+        });
+      });
+  </script>
+</body>
+</html>
